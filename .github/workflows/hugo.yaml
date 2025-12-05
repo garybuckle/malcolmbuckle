@@ -91,7 +91,7 @@ jobs:
           restore-keys: |
             hugo-
 
-      - name: Build the site
+            - name: Build the site
         run: |
           hugo \
             --gc \
@@ -100,11 +100,25 @@ jobs:
             --cacheDir "${{ runner.temp }}/hugo_cache"
 
       # -------------------------------------------------
-      # *** NEW STEP – disable Jekyll ***
+      # DEBUG: list what Hugo actually generated
+      # -------------------------------------------------
+      - name: List generated static assets
+        run: |
+          echo "=== CONTENT OF OUTPUT DIRECTORY ==="
+          find public -type f | sort
+          echo "=== LOOKING FOR THE IMAGE ==="
+          if [ -f public/images/Max_Annia-150x150.jpg ]; then
+            echo "✅ Image is present in the build output"
+          else
+            echo "❌ Image NOT found in the build output"
+          fi
+
+      # -------------------------------------------------
+      # ENSURE .nojekyll is in the *actual* output folder
       # -------------------------------------------------
       - name: Add .nojekyll file
         run: |
-          touch public/.nojekyll
+          touch public/.nojekyll   # change "public" if you use a custom publishDir
 
       - name: Cache save
         id: cache-save
