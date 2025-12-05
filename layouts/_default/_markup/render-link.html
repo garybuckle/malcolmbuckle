@@ -1,0 +1,28 @@
+{{- /* Render hook to make all Markdown links open in a new tab */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $href := $u.String -}}
+
+{{- /* Start with incoming attributes (from Markdown attribute lists, if any) */ -}}
+{{- $attrs := merge .Attributes (dict "href" $href) -}}
+
+{{- /* Add title if present */ -}}
+{{- with .Title -}}
+  {{- $attrs = merge $attrs (dict "title" (. | transform.HTMLEscape)) -}}
+{{- end -}}
+
+{{- /* Enforce opening in a new tab for all Markdown links */ -}}
+{{- $attrs = merge $attrs (dict "target" "_blank") -}}
+
+{{- /* Ensure safe rel values; preserve any existing rel and append tokens uniquely */ -}}
+{{- $existingRel := (index $attrs "rel") | default "" -}}
+{{- $tokens := slice -}}
+{{- range (split (strings.TrimSpace $existingRel) " ") -}}
+  {{- if and . (not (in $tokens .)) -}}{{- $tokens = $tokens | append . -}}{{- end -}}
+{{- end -}}
+{{- range (slice "noopener" "noreferrer") -}}
+  {{- if not (in $tokens .) -}}{{- $tokens = $tokens | append . -}}{{- end -}}
+{{- end -}}
+{{- $rel := delimit $tokens " " -}}
+{{- $attrs = merge $attrs (dict "rel" $rel) -}}
+
+<a{{- range $k, $v := $attrs -}}{{- if $v -}} {{ printf "%s=%q" $k $v | safeHTMLAttr }}{{- end -}}{{- end -}}>{{ .Text | safeHTML }}</a>
