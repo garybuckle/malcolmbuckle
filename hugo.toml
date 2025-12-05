@@ -24,7 +24,9 @@ enable = true
 block = [['\[', '\]'], ['$$', '$$']]
 inline = [['\(', '\)']]
 
-
+[caches]
+[caches.images]
+dir = ':cacheDir/images'
 
 [[menu.main]]
 identifier = "home"
