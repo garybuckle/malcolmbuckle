@@ -1,0 +1,46 @@
+# config.toml
+baseURL = "https://example.com/"
+title   = "Malcolm Buckle"
+theme   = "PaperMod"
+
+
+[params]
+readingTime = true
+defaultTheme = "auto"
+math = true
+
+
+social = [
+    { name = "LinkedIn",  url = "www.linkedin.com/in/malcolm-buckle-4b4ba85" },
+    { name = "Twitter", url = "https://twitter.com/yourhandle" }
+]
+
+[markup]
+[markup.goldmark]
+[markup.goldmark.extensions]
+[markup.goldmark.extensions.passthrough]
+enable = true
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [['\[', '\]'], ['$$', '$$']]
+inline = [['\(', '\)']]
+
+
+
+[[menu.main]]
+identifier = "home"
+name       = "Home"
+url        = "/"
+weight     = 1
+
+[[menu.main]]
+identifier = "about"
+name       = "About Me"
+url        = "/about/"
+weight     = 2
+
+[[menu.main]]
+identifier = "posts"
+name       = "Articles"
+url        = "/posts/"
+weight     = 3
+
